@@ -1,0 +1,49 @@
+version: "3.9"
+
+services:
+  frontend:
+    build: 
+      context: ./finance-dashboard-frontend
+      dockerfile: Dockerfile
+    image: finance-dashboard-frontend:latest
+    container_name: finance-dashboard-frontend
+    volumes:
+      - ./finance-dashboard-frontend:/app
+      - /app/node_modules  # Prevent overwriting node_modules
+    ports:
+      - "3000:3000"
+    environment:
+      - WATCHPACK_POLLING=true
+      - CHOKIDAR_USEPOLLING=true  # Fix file change detection in Docker
+    command: ["npm", "start"]
+
+  api-proxy:
+    build:
+      context: ./finance-api-proxy
+      dockerfile: Dockerfile
+    image: finance-api-proxy:latest
+    container_name: finance-api-proxy
+    volumes:
+      - ./finance-api-proxy:/app
+      - /app/node_modules  # Prevent overwriting node_modules
+    ports:
+      - "4000:4000"
+    depends_on:
+      - backend
+    environment:
+      - NODE_ENV=development
+    command: ["npx", "nodemon", "--legacy-watch", "index.js"]  # Ensures file change detection works
+
+  backend:
+    build:
+      context: ./finance-api-backend
+      dockerfile: Dockerfile
+    container_name: finance-api-backend
+    image: finance-api-backend:latest
+    volumes:
+      - ./finance-api-backend:/app
+    ports:
+      - "5000:5000"
+    environment:
+      - PYTHONUNBUFFERED=1
+    command: ["uvicorn", "api:app", "--host", "0.0.0.0", "--port", "5000", "--reload"]  # No need for pip install every time
