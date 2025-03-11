@@ -1,0 +1,5 @@
+cmds to run migrations in docker env
+
+- docker exec -it finance-api-backend alembic revision --autogenerate -m "Initial migration"
+- docker exec -it finance-api-backend alembic upgrade head
+- docker exec -it finance-db psql -U postgres -d finance_db -c "\dt"
