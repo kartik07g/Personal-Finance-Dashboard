@@ -1,23 +1,24 @@
 from fastapi import FastAPI
 from Resources.User import user_router
 from Resources.UserAuth import user_auth_router
+from Resources.Transactions import transaction_router
+from Resources.Assets import asset_router
+from Resources.Liabilities import liability_router
 
 # Create FastAPI app instance
 app = FastAPI()
 
+# Healthcheck endpoint
+@app.get("/healthcheck")
+def read_root():
+    return {"status": "ok"}
+
+
+
 app.include_router(user_router)
 app.include_router(user_auth_router)
-# Root endpoint
-@app.get("/")
-def read_root():
-    return {"message": "Welcome to the FastAPI!"}
+app.include_router(transaction_router)
+app.include_router(asset_router)
+app.include_router(liability_router)
 
-# Example GET endpoint
-@app.get("/items/{item_id}")
-def read_item(item_id: int, q: str = None):
-    return {"item_id": item_id, "query": q}
 
-# Example POST endpoint
-@app.post("/items/")
-def create_item(item: dict):
-    return {"message": "Item created successfully", "item": item}
