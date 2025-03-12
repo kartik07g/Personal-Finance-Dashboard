@@ -1,8 +1,12 @@
 from fastapi import FastAPI
+from Resources.User import user_router
+from Resources.UserAuth import user_auth_router
 
 # Create FastAPI app instance
 app = FastAPI()
 
+app.include_router(user_router)
+app.include_router(user_auth_router)
 # Root endpoint
 @app.get("/")
 def read_root():
