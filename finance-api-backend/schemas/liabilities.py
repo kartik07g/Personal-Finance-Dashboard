@@ -17,6 +17,7 @@ class LiabilityResponse(LiabilityBase):
     liability_id: str
     user_id: str
     created_at: datetime
+    updated_at: Optional[datetime]
 
     class Config:
         orm_mode = True

@@ -3,6 +3,7 @@ from fastapi import HTTPException
 from models.transactions import Transactions
 from schemas import TransactionCreate, TransactionUpdate, TransactionResponse
 from .TransactionsServiceInterface import TransactionsServiceInterface
+from datetime import datetime
 import uuid
 
 class TransactionsService(TransactionsServiceInterface):
@@ -40,6 +41,8 @@ class TransactionsService(TransactionsServiceInterface):
 
         for key, value in transaction_data.model_dump(exclude_unset=True).items():
             setattr(transaction, key, value)
+
+        transaction.updated_at = datetime.utcnow()
 
         db.commit()
         db.refresh(transaction)

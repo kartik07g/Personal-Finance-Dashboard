@@ -12,12 +12,16 @@ services:
       - /app/node_modules  # Prevent overwriting node_modules
     ports:
       - "3000:3000"
+    depends_on:
+      - apiproxy
     environment:
       - WATCHPACK_POLLING=true
       - CHOKIDAR_USEPOLLING=true  # Fix file change detection in Docker
+    # networks:
+    # - app_network
     command: ["npm", "start"]
 
-  api-proxy:
+  apiproxy:
     build:
       context: ./finance-api-proxy
       dockerfile: Dockerfile
@@ -32,6 +36,8 @@ services:
       - backend
     environment:
       - NODE_ENV=development
+    # networks:
+    #   - app_network
     command: ["npx", "nodemon", "--legacy-watch", "index.js"]  # Ensures file change detection works
 
   backend:
@@ -49,6 +55,8 @@ services:
       - "5000:5000"
     environment:
       - DATABASE_URL=postgresql://postgres:my-secret-pw@db:5432/finance_db
+    # networks:
+    #   - app_network
     command: ["sh", "-c", "alembic upgrade head && uvicorn api:app --host 0.0.0.0 --port 5000 --reload"]
 
   db:
@@ -81,3 +89,7 @@ services:
 
 volumes:
   pg_data:
+
+# networks:
+#   app_network:
+#     driver: bridge

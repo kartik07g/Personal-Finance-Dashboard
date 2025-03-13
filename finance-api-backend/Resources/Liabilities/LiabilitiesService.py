@@ -7,6 +7,7 @@ import uuid
 
 class LiabilitiesService:
     def create_liability(self, db: Session, user_id: str, liability_data: LiabilityCreate):
+        print("liability_data",liability_data)
         liability = Liabilities(
             user_id=user_id,
             name=liability_data.name,
@@ -35,6 +36,8 @@ class LiabilitiesService:
             liability.name = liability_data.name
         if liability_data.amount:
             liability.amount = liability_data.amount
+
+        liability.updated_at = datetime.utcnow()
 
         db.commit()
         db.refresh(liability)

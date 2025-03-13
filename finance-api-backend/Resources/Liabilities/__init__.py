@@ -16,8 +16,9 @@ def get_liabilities(db: Session = Depends(get_db), current_user=Depends(get_curr
 def get_liability(liability_id: str, db: Session = Depends(get_db), current_user=Depends(get_current_user)):
     return LiabilitiesFront().get_liability(db, liability_id)
 
-@liability_router.post("/create/", response_model=LiabilityResponse)
+@liability_router.post("/create", response_model=LiabilityResponse)
 def create_liability(liability_data: LiabilityCreate, db: Session = Depends(get_db), current_user=Depends(get_current_user)):
+    print("***********call in crate lib")
     return LiabilitiesFront().create_liability(db, current_user.user_id, liability_data)
 
 @liability_router.patch("/update/{liability_id}", response_model=LiabilityResponse)  # 🔹 Using PATCH instead of PUT

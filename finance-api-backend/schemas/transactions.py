@@ -23,6 +23,7 @@ class TransactionResponse(TransactionBase):
     transaction_id: str
     user_id: str
     created_at: datetime
+    updated_at: Optional[datetime]
 
     class Config:
         from_attributes = True  # Allows SQLAlchemy conversion

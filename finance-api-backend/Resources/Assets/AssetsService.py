@@ -37,6 +37,8 @@ class AssetsService(AssetsServiceInterface):
         if asset_data.value:
             asset.value = asset_data.value
 
+        asset.updated_at = datetime.utcnow()
+
         db.commit()
         db.refresh(asset)
         return asset

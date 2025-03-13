@@ -12,6 +12,7 @@ class Assets(Base):
     name = Column(String, nullable=False)  # Bank balance, property, stocks, etc.
     value = Column(Float, nullable=False)
     created_at = Column(DateTime, default=datetime.utcnow)
+    updated_at = Column(DateTime, nullable=True)
 
     # Relationship
     user = relationship("Users", back_populates="assets")

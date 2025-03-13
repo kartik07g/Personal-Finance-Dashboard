@@ -13,6 +13,7 @@ class Transactions(Base):
     category = Column(String, nullable=False)  # Salary, Rent, Food, etc.
     amount = Column(Float, nullable=False)
     created_at = Column(DateTime, default=datetime.utcnow)
+    updated_at = Column(DateTime, nullable=True)
 
     # Relationship
     user = relationship("Users", back_populates="transactions")

@@ -12,6 +12,7 @@ class Liabilities(Base):
     name = Column(String, nullable=False)  # Loans, credit card debt, etc.
     amount = Column(Float, nullable=False)
     created_at = Column(DateTime, default=datetime.utcnow)
+    updated_at = Column(DateTime, nullable=True)
 
     # Relationship
     user = relationship("Users", back_populates="liabilities")
