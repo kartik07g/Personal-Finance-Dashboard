@@ -1,16 +1,16 @@
 import express from "express";
 import transactionsRoutes from "./transactionsRoutes.js";
 import usersRoutes from "./usersRoutes.js";
-import assetsRoutes from "./assetsRoutes.js";
-import liabilitiesRoutes from "./liabilitiesRoutes.js";
-import userAuthRoutes from "./userAuthRoutes.js"
+import assetsAndLiabilityRoutes from "./assetsAndLiabilityRoutes.js";
+import userAuthRoutes from "./userAuthRoutes.js";
+import reportRoutes from "./reportRoutes.js";
 
 const router = express.Router();
 
 router.use("/", transactionsRoutes);
 router.use("/", usersRoutes);
-router.use("/", assetsRoutes);
-router.use("/", liabilitiesRoutes);
+router.use("/", assetsAndLiabilityRoutes);
 router.use("/", userAuthRoutes);
+router.use("/", reportRoutes);
 
 export default router;

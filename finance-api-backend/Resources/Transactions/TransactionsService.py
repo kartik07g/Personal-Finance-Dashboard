@@ -30,7 +30,7 @@ class TransactionsService(TransactionsServiceInterface):
 
     def get_transactions(self, db: Session, user_id: str):
         """Retrieve all transactions for a user."""
-        transactions = db.query(Transactions).filter(Transactions.user_id == user_id).all()
+        transactions = (db.query(Transactions).filter(Transactions.user_id == user_id).order_by(Transactions.created_at.desc()).all())
         return [TransactionResponse.model_validate(txn) for txn in transactions]
 
     def update_transaction(self, db: Session, transaction_id: str, transaction_data: TransactionUpdate):

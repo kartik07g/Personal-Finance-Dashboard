@@ -1,20 +1,33 @@
 /* LeftNav.css */
 .left-nav {
-    width: 250px;
-    height: 100vh;
-    background: #1e293b;
-    color: #fff;
-    display: flex;
-    flex-direction: column;
-    padding: 20px 10px;
-    transition: width 0.3s ease;
-    overflow: hidden;
-  }
-  
+  width: 200px;
+  height: 100vh; /* Full height */
+  position: fixed; /* Fix the nav to the left */
+  top: 0;
+  left: 0;
+  background: #1e293b;
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+  padding: 20px 10px;
+  transition: width 0.3s ease;
+  overflow: hidden;
+}
+
   .left-nav.collapsed {
     width: 80px;
   }
-  
+  .main-content {
+    margin-left: 200px; /* Push content right */
+    height: 100vh;
+    overflow-y: auto;
+    padding: 20px;
+    background: #f1f5f9;
+}
+
+.left-nav.collapsed + .main-content {
+  margin-left: 80px; /* Adjust when collapsed */
+}
   .nav-header {
     display: flex;
     align-items: center;

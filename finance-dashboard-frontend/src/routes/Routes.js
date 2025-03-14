@@ -3,6 +3,8 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-d
 import Signup from "../pages/Signup";
 import Login from "../pages/Login";
 import Dashboard from "../pages/Dashboard";
+import Transactions from "../pages/Transactions";
+import AssetLiabilities from "../pages/AssetLiabilities";
 import { useSelector } from "react-redux";
 
 // Protected Route Wrapper
@@ -23,6 +25,22 @@ const AppRoutes = () => {
           element={
             <PrivateRoute>
               <Dashboard />
+            </PrivateRoute>
+          } 
+        />
+        <Route 
+          path="/transactions" 
+          element={
+            <PrivateRoute>
+              <Transactions />
+            </PrivateRoute>
+          } 
+        />
+        <Route 
+          path="/assets-liabilities" 
+          element={
+            <PrivateRoute>
+              <AssetLiabilities />
             </PrivateRoute>
           } 
         />

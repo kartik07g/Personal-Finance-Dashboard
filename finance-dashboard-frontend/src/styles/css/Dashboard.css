@@ -1,13 +1,147 @@
-/* Dashboard Layout Styling */
-.dashboard-container {
-    display: flex;
-    height: 100vh;
+/* Dashboard Layout */
+.dashboard {
+  display: flex;
+  height: 100vh;
+  background: #f4f6f9;
+}
+
+
+/* Main Dashboard Content */
+.dashboard-content {
+  flex: 1;
+  margin-left: 270px;  /* Adjust based on left nav width */
+  padding: 30px;
+}
+
+/* Summary Cards */
+.summary-container {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+  margin-bottom: 30px;
+}
+
+.summary-card {
+  flex: 1;
+  padding: 20px;
+  border-radius: 10px;
+  text-align: center;
+  font-size: 18px;
+  font-weight: bold;
+  color: white;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  transition: transform 0.3s ease-in-out;
+}
+
+.summary-card p {
+  font-size: 28px;
+  margin-top: 10px;
+}
+
+.summary-card:hover {
+  transform: translateY(-5px);
+}
+
+.income { background: #28a745; }
+.expenses { background: #dc3545; }
+.net-worth { background: #007bff; }
+
+/* Charts Section */
+.charts-container {
+  display: flex;
+  gap: 20px;
+  margin-bottom: 30px;
+}
+
+.chart {
+  flex: 1;
+  background: white;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  transition: 0.3s;
+}
+
+.chart:hover {
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
+}
+
+/* Transactions Section */
+.transactions-container {
+  background: white;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.transactions-container h3 {
+  margin-bottom: 15px;
+}
+
+.transaction-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 10px;
+}
+
+.transaction-table th, .transaction-table td {
+  padding: 12px;
+  border-bottom: 1px solid #ddd;
+  text-align: left;
+}
+
+.transaction-table th {
+  background: #f8f9fa;
+  font-weight: bold;
+}
+
+.transaction-table tbody tr:hover {
+  background: #f1f1f1;
+}
+
+.income-row td { color: #28a745; }
+.expense-row td { color: #dc3545; }
+
+/* Buttons */
+.buttons-container {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+}
+
+.btn {
+  padding: 12px 20px;
+  font-size: 16px;
+  border: none;
+  border-radius: 5px;
+  color: white;
+  cursor: pointer;
+  transition: 0.3s ease-in-out;
+}
+
+.btn:hover {
+  opacity: 0.85;
+}
+
+.add-transaction { background: #28a745; }
+.add-transaction:hover { background: #218838; }
+
+.add-asset-liability { background: #007bff; }
+.add-asset-liability:hover { background: #0056b3; }
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+  .dashboard {
+      flex-direction: column;
   }
-  
-  .main-content {
-    flex-grow: 1;
-    padding: 20px;
-    background: #f1f5f9;
-    overflow-y: auto;
+
+  .dashboard-content {
+      margin-left: 0;
+      padding: 20px;
   }
-  
+
+
+  .summary-container, .charts-container {
+      flex-direction: column;
+  }
+}

@@ -17,8 +17,7 @@ class Users(Base):
 
     # Relationships
     transactions = relationship("Transactions", back_populates="user", cascade="all, delete-orphan")
-    assets = relationship("Assets", back_populates="user", cascade="all, delete-orphan")
-    liabilities = relationship("Liabilities", back_populates="user", cascade="all, delete-orphan")
+    assets_and_liabilities = relationship("AssetsAndLiability", back_populates="user", cascade="all, delete-orphan")
 
     def __init__(self, name, email, password):
         self.user_id = self.generate_user_id()
