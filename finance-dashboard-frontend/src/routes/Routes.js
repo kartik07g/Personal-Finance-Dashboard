@@ -5,6 +5,7 @@ import Login from "../pages/Login";
 import Dashboard from "../pages/Dashboard";
 import Transactions from "../pages/Transactions";
 import AssetLiabilities from "../pages/AssetLiabilities";
+import ProfileManagement from "../pages/ProfileManagement";
 import { useSelector } from "react-redux";
 
 // Protected Route Wrapper
@@ -41,6 +42,14 @@ const AppRoutes = () => {
           element={
             <PrivateRoute>
               <AssetLiabilities />
+            </PrivateRoute>
+          } 
+        />
+        <Route 
+          path="/profile" 
+          element={
+            <PrivateRoute>
+              <ProfileManagement />
             </PrivateRoute>
           } 
         />

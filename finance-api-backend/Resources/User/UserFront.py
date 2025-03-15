@@ -9,11 +9,11 @@ class UserFront:
     def logout(self):
         return self.user_service.logout_user()
 
-    def get_users(self, db, user_id: str):
-        return self.user_service.get_users(db, user_id)
+    def get_users(self, db, authToken: str, current_user):
+        return self.user_service.get_users(db, current_user, authToken)
 
     def update_user(self, db, user_data: UserUpdate, current_user):
         return self.user_service.update_user_details(db, user_data, current_user)
 
-    def remove_user(self, db, current_user):
-        return self.user_service.delete_user(db, current_user)
+    def remove_user(self,user_id, db, current_user):
+        return self.user_service.delete_user(user_id, db, current_user)

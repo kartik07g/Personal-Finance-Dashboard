@@ -18,14 +18,14 @@ def signout():
 # def test_auth(db: Session = Depends(get_db),current_user: Depends(get_current_user)):
 #     return {"user_id": current_user.id}
 @user_router.get("/users", response_model=List[UserResponseSchema])
-@user_router.get("/users/{user_id}", response_model=UserResponseSchema)
-def get_users(user_id: Optional[str] = None, db: Session = Depends(get_db), current_user=Depends(get_current_user)):
-    return UserFront().get_users(db, user_id)
+@user_router.get("/users/{authToken}", response_model=UserResponseSchema)
+def get_users(authToken: Optional[str] = None, db: Session = Depends(get_db), current_user=Depends(get_current_user)):
+    return UserFront().get_users(db, authToken, current_user)
 
 @user_router.patch("/update")
 def update_user(user_data: UserUpdate, db: Session = Depends(get_db), current_user=Depends(get_current_user)):
     return UserFront().update_user(db, user_data, current_user)
 
-@user_router.delete("/remove")
-def remove_user(db: Session = Depends(get_db), current_user=Depends(get_current_user)):
-    return UserFront().remove_user(db, current_user)
+@user_router.delete("/remove/{user_id}")
+def remove_user(user_id ,db: Session = Depends(get_db), current_user=Depends(get_current_user)):
+    return UserFront().remove_user(user_id, db, current_user)

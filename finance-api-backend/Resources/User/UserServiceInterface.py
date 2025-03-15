@@ -8,7 +8,7 @@ class UserServiceInterface(ABC):
 
     @staticmethod
     @abstractmethod
-    def get_users(db, user_id, user_data):
+    def get_users(db, current_user, authToken ):
         pass
 
     @staticmethod
@@ -18,5 +18,5 @@ class UserServiceInterface(ABC):
 
     @staticmethod
     @abstractmethod
-    def remove_user():
+    def delete_user(user_id, db, current_user):
         pass

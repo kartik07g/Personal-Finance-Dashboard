@@ -10,3 +10,7 @@ class UserAuthServiceInterface(ABC):
     @abstractmethod
     def authenticate_user(self, db: Session, login_data: UserLogin):
         pass
+
+    @abstractmethod
+    def google_oauth_register_or_login(self, db: Session, google_token):
+        pass

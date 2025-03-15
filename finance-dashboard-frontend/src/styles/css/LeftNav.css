@@ -103,6 +103,7 @@
   .signout-btn {
     display: flex;
     align-items: center;
+    margin-bottom: 40px;
     gap: 12px;
     background: none;
     border: none;

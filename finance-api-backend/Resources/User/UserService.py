@@ -10,13 +10,13 @@ class UserService:
     def logout_user(self):
         return {"message": "User logged out successfully"}
 
-    def get_users(self, db: Session, user_id: Optional[str] = None):
+    def get_users(self, db: Session, current_user, authToken: Optional[str] = None):
         """
         Fetch all users if no user_id is provided, else fetch a specific user.
         Convert SQLAlchemy model to Pydantic response schema.
         """
-        if user_id:
-            user = db.query(Users).filter(Users.user_id == user_id).first()
+        if authToken:
+            user = db.query(Users).filter(Users.user_id == current_user.user_id).first()
             if not user:
                 raise HTTPException(status_code=404, detail=f"User with ID {user_id} not found")
             
@@ -51,8 +51,8 @@ class UserService:
 
         return {"message": "User updated successfully", "user": {"id": user.user_id, "name": user.name, "email": user.email}}
 
-    def delete_user(self, db: Session, current_user):
-        user = db.query(Users).filter(Users.id == current_user.id).first()
+    def delete_user(self, user_id, db: Session, current_user):
+        user = db.query(Users).filter(Users.user_id == user_id).first()
         if not user:
             raise HTTPException(status_code=404, detail="User not found")
 

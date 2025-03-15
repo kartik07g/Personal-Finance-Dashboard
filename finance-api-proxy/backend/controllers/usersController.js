@@ -4,7 +4,8 @@ import { BACKEND_BASE_URL } from "../utils/config.js";
 export const getUsers = async (req, res) => {
   try {
     console.log(`🔹 Forwarding GET request: ${req.originalUrl}`);
-    const response = await axios.get(`${BACKEND_BASE_URL}${req.originalUrl.replace(/^\/proxy/, "")}`);
+    const response = await axios.get(`${BACKEND_BASE_URL}${req.originalUrl.replace(/^\/proxy/, "")}`,
+    { headers: { "Content-Type": "application/json", Authorization: req.headers.authorization, } });
     res.status(response.status).json(response.data);
   } catch (error) {
     console.error("❌ Error in getUsers:", error.message);

@@ -5,6 +5,6 @@ import {
 
 const router = express.Router();
 
-router.post("/generate-report", generateReport);
+router.post("/generate-report-test", generateReport);
 
 export default router;

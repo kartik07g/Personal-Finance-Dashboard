@@ -3,6 +3,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import { loginUser, clearError } from "../redux/slices/authSlice"; // Import login action
 import "../styles/css/Auth.css"; // Import CSS file for styling
+import { GoogleLogin } from '@react-oauth/google';
+
 
 const Login = () => {
   const dispatch = useDispatch();
@@ -23,7 +25,6 @@ const Login = () => {
     // Dispatch login action
     try {
       const resultAction = await dispatch(loginUser(formData));
-      console.log("*****resultAction",resultAction);
       
 
       if (loginUser.fulfilled.match(resultAction)) {
@@ -34,6 +35,35 @@ const Login = () => {
       console.error("Login failed:", err);
     }
   };
+
+  const handleGoogleSuccess = async (credentialResponse) => {
+    
+    const accessToken = credentialResponse.credential;
+    try {
+      const response = await fetch('http://localhost:4000/proxy/auth/google/callback', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ token: accessToken }),
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        sessionStorage.setItem("authToken", data.access_token);
+        window.location.href = '/dashboard';
+      } else {
+        console.error('Google login failed:', response.statusText);
+      }
+    } catch (error) {
+      console.error('Error during Google login:', error);
+    }
+  };
+
+  const handleGoogleFailure = (error) => {
+    console.error('Google login failure:', error);
+  };
+
 
   return (
     <div className="auth-container">
@@ -69,6 +99,12 @@ const Login = () => {
             {loading ? "Logging in..." : "Login"}
           </button>
         </form>
+        <div style={{marginTop: "10px"}}>
+                  <GoogleLogin
+                    onSuccess={handleGoogleSuccess}
+                    onError={handleGoogleFailure}
+                  />
+                </div>
 
         <p>
           Don't have an account?{" "}

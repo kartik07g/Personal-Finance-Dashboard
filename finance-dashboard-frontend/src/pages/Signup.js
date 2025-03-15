@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { signupUser } from "../redux/slices/authSlice";
 import { Link, useNavigate } from "react-router-dom";
 import "../styles/css/Auth.css";
+import { GoogleLogin } from '@react-oauth/google';
 
 const Signup = () => {
   const dispatch = useDispatch();
@@ -22,7 +23,7 @@ const Signup = () => {
 
     try {
       const resultAction = await dispatch(signupUser(formData));
-      
+
       if (signupUser.fulfilled.match(resultAction)) {
         setSuccessMessage("Signup successful! Redirecting to login...");
         setTimeout(() => navigate("/login"), 2000);
@@ -32,13 +33,41 @@ const Signup = () => {
     }
   };
 
+  const handleGoogleSuccess = async (credentialResponse) => {
+    
+    const accessToken = credentialResponse.credential;
+    try {
+      const response = await fetch('http://localhost:4000/proxy/auth/google/callback', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ token: accessToken }),
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        sessionStorage.setItem("authToken", data.access_token);
+        window.location.href = '/dashboard';
+      } else {
+        console.error('Google login failed:', response.statusText);
+      }
+    } catch (error) {
+      console.error('Error during Google login:', error);
+    }
+  };
+
+  const handleGoogleFailure = (error) => {
+    console.error('Google login failure:', error);
+  };
+
   return (
     <div className="auth-container">
       <div className="auth-box">
         <h2>Sign Up</h2>
         {successMessage && <p className="success-message">{successMessage}</p>}
         {error && <p className="error-message">{error.error}</p>}
-        
+
         <form onSubmit={handleSubmit}>
           <div className="input-group">
             <label>Name</label>
@@ -77,7 +106,13 @@ const Signup = () => {
             {loading ? "Signing Up..." : "Sign Up"}
           </button>
         </form>
-        
+        <div style={{marginTop: "10px"}}>
+          <GoogleLogin
+            onSuccess={handleGoogleSuccess}
+            onError={handleGoogleFailure}
+          />
+        </div>
+
         <p>
           Already have an account?{" "}
           <Link to="/login" className="auth-link">Login here</Link>

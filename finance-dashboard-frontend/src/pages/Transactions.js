@@ -12,7 +12,7 @@ const TransactionsPage = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [selectedTransaction, setSelectedTransaction] = useState(null);
-  const authToken = useSelector((state) => state.auth.token);
+  const authToken = sessionStorage.getItem("authToken");
 
   const apiUrl = "http://localhost:4000/proxy/transactions"; // Base API URL
 

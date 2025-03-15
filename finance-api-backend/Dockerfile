@@ -1,6 +1,10 @@
 # Use official Python image
 FROM python:3.11-slim
 
+# Install system dependencies and set timezone
+RUN apt-get update && apt-get install -y tzdata && rm -rf /var/lib/apt/lists/*
+RUN ln -snf /usr/share/zoneinfo/IST /etc/localtime && echo IST > /etc/timezone
+
 # Set working directory
 WORKDIR /app
 

@@ -1,6 +1,7 @@
 fastapi
 uvicorn
 sqlalchemy
+authlib
 alembic
 psycopg2-binary
 passlib[bcrypt]   # Secure password hashing
@@ -10,3 +11,5 @@ pydantic
 pydantic[email]
 email-validator
 python-jose
+google-auth
+requests
