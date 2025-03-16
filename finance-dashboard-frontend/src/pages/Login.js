@@ -1,10 +1,10 @@
 import React, { useState } from "react";
- import { useDispatch, useSelector } from "react-redux";
- import { Link, useNavigate } from "react-router-dom";
- import { loginUser } from "../redux/slices/authSlice";
- import { GoogleLogin } from '@react-oauth/google';
- import { config } from "../config";
- import {
+import { useDispatch, useSelector } from "react-redux";
+import { Link, useNavigate } from "react-router-dom";
+import { loginUser } from "../redux/slices/authSlice";
+import { GoogleLogin } from '@react-oauth/google';
+import { config } from "../config";
+import {
   Paper,
   Typography,
   TextField,
@@ -12,18 +12,22 @@ import React, { useState } from "react";
   Box,
   CircularProgress,
   Alert,
- } from "@mui/material";
- import { styled } from '@mui/material/styles';
+} from "@mui/material";
+import { styled } from '@mui/material/styles';
 
- const StyledPaper = styled(Paper)(({ theme }) => ({
+const StyledPaper = styled(Paper)(({ theme }) => ({
   padding: theme.spacing(4),
   display: 'flex',
   flexDirection: 'column',
   alignItems: 'center',
   width: '350px',
- }));
+  background: 'linear-gradient(135deg, #e0e0e0, #d1d5db)', // Light grey and slate grey
+  border: '1px solid #9ca3af', // Medium slate grey border
+  borderRadius: '12px', // Slightly more rounded corners
+  boxShadow: '0 8px 16px rgba(0, 0, 0, 0.15)', // Enhanced shadow
+}));
 
- const Login = () => {
+const Login = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { loading, error } = useSelector((state) => state.auth);
@@ -92,6 +96,9 @@ import React, { useState } from "react";
       <StyledPaper elevation={3}>
         <Typography variant="h5" component="h2" gutterBottom>
           Login
+        </Typography>
+        <Typography variant="h5" component="h2" gutterBottom>
+          To Personal Finance Manager
         </Typography>
         {error && <Alert severity="error">{error.error || "Login failed"}</Alert>}
         {successMessage && <Alert severity="success">{successMessage}</Alert>}
