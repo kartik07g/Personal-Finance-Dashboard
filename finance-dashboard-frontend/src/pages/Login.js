@@ -1,18 +1,36 @@
 import React, { useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { Link, useNavigate } from "react-router-dom";
-import { loginUser, clearError } from "../redux/slices/authSlice"; // Import login action
-import "../styles/css/Auth.css"; // Import CSS file for styling
-import { GoogleLogin } from '@react-oauth/google';
+ import { useDispatch, useSelector } from "react-redux";
+ import { Link, useNavigate } from "react-router-dom";
+ import { loginUser } from "../redux/slices/authSlice";
+ import { GoogleLogin } from '@react-oauth/google';
+ import { config } from "../config";
+ import {
+  Paper,
+  Typography,
+  TextField,
+  Button,
+  Box,
+  CircularProgress,
+  Alert,
+ } from "@mui/material";
+ import { styled } from '@mui/material/styles';
 
+ const StyledPaper = styled(Paper)(({ theme }) => ({
+  padding: theme.spacing(4),
+  display: 'flex',
+  flexDirection: 'column',
+  alignItems: 'center',
+  width: '350px',
+ }));
 
-const Login = () => {
+ const Login = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { loading, error } = useSelector((state) => state.auth); // Get auth state
+  const { loading, error } = useSelector((state) => state.auth);
 
   const [formData, setFormData] = useState({ email: "", password: "" });
   const [successMessage, setSuccessMessage] = useState("");
+  const apiUrl = "http://localhost:4000/proxy";
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -21,15 +39,13 @@ const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setSuccessMessage("");
-    
-    // Dispatch login action
+
     try {
       const resultAction = await dispatch(loginUser(formData));
-      
 
       if (loginUser.fulfilled.match(resultAction)) {
         setSuccessMessage("Login successful! Redirecting...");
-        setTimeout(() => navigate("/dashboard"), 1500); // Redirect after success
+        setTimeout(() => navigate("/dashboard"), 1500);
       }
     } catch (err) {
       console.error("Login failed:", err);
@@ -37,10 +53,9 @@ const Login = () => {
   };
 
   const handleGoogleSuccess = async (credentialResponse) => {
-    
     const accessToken = credentialResponse.credential;
     try {
-      const response = await fetch('http://localhost:4000/proxy/auth/google/callback', {
+      const response = await fetch(`${config.API_URL}/auth/google/callback`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -64,54 +79,71 @@ const Login = () => {
     console.error('Google login failure:', error);
   };
 
-
   return (
-    <div className="auth-container">
-      <div className="auth-box">
-        <h2>Login</h2>
-        {error && <p className="error-message">{error.error || "Login failed"}</p>}
-        {successMessage && <p className="success-message">{successMessage}</p>}
+    <Box
+      sx={{
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        minHeight: '100vh',
+        bgcolor: '#f4f6f9', // Optional: Add a background color to the page
+      }}
+    >
+      <StyledPaper elevation={3}>
+        <Typography variant="h5" component="h2" gutterBottom>
+          Login
+        </Typography>
+        {error && <Alert severity="error">{error.error || "Login failed"}</Alert>}
+        {successMessage && <Alert severity="success">{successMessage}</Alert>}
 
-        <form onSubmit={handleSubmit}>
-          <div className="input-group">
-            <label>Email</label>
-            <input
-              type="email"
-              name="email"
-              placeholder="Enter your email"
-              value={formData.email}
-              onChange={handleChange}
-              required
-            />
-          </div>
-          <div className="input-group">
-            <label>Password</label>
-            <input
-              type="password"
-              name="password"
-              placeholder="Enter your password"
-              value={formData.password}
-              onChange={handleChange}
-              required
-            />
-          </div>
-          <button type="submit" className="auth-button" disabled={loading}>
-            {loading ? "Logging in..." : "Login"}
-          </button>
+        <form onSubmit={handleSubmit} style={{ width: '100%' }}>
+          <TextField
+            label="Email"
+            name="email"
+            placeholder="Enter your email"
+            value={formData.email}
+            onChange={handleChange}
+            required
+            fullWidth
+            margin="normal"
+            type="email"
+          />
+          <TextField
+            label="Password"
+            name="password"
+            placeholder="Enter your password"
+            value={formData.password}
+            onChange={handleChange}
+            required
+            fullWidth
+            margin="normal"
+            type="password"
+          />
+          <Button
+            type="submit"
+            variant="contained"
+            color="primary"
+            fullWidth
+            disabled={loading}
+            style={{ marginTop: '1rem' }}
+          >
+            {loading ? <CircularProgress size={24} /> : "Login"}
+          </Button>
         </form>
-        <div style={{marginTop: "10px"}}>
-                  <GoogleLogin
-                    onSuccess={handleGoogleSuccess}
-                    onError={handleGoogleFailure}
-                  />
-                </div>
-
-        <p>
+        <Box mt={2}>
+          <GoogleLogin
+            onSuccess={handleGoogleSuccess}
+            onError={handleGoogleFailure}
+          />
+        </Box>
+        <Typography variant="body2" style={{ marginTop: '1rem' }}>
           Don't have an account?{" "}
-          <Link to="/signup" className="auth-link">Sign up here</Link>
-        </p>
-      </div>
-    </div>
+          <Link to="/signup" style={{ textDecoration: 'none', color: '#1976d2' }}>
+            Sign up here
+          </Link>
+        </Typography>
+      </StyledPaper>
+    </Box>
   );
 };
 

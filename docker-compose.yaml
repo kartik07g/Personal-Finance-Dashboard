@@ -4,9 +4,13 @@ services:
   frontend:
     build: 
       context: ./finance-dashboard-frontend
+      # args:
+        # - FINANCE_API_PROXY_URL_BASE : ${FINANCE_API_PROXY_URL_BASE}
       dockerfile: Dockerfile
     image: finance-dashboard-frontend:latest
     container_name: finance-dashboard-frontend
+    env_file:
+      - .env
     volumes:
       - ./finance-dashboard-frontend:/app
       - /app/node_modules  # Prevent overwriting node_modules
@@ -27,6 +31,8 @@ services:
       dockerfile: Dockerfile
     image: finance-api-proxy:latest
     container_name: finance-api-proxy
+    env_file:
+      - .env
     volumes:
       - ./finance-api-proxy:/app
       - /app/node_modules  # Prevent overwriting node_modules
@@ -46,6 +52,8 @@ services:
       dockerfile: Dockerfile
     container_name: finance-api-backend
     image: finance-api-backend:latest
+    env_file:
+      - .env
     volumes:
       - ./finance-api-backend:/app
     depends_on:

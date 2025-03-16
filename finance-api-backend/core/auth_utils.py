@@ -9,6 +9,7 @@ from sqlalchemy.orm import Session
 from models.user import Users  # Import your Users model
 from core.database import get_db  # Import the DB session dependency
 import json
+import os
 
 # Define password hashing context
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
@@ -16,8 +17,8 @@ pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 # Define OAuth2 scheme
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/signin")
 
-SECRET_KEY = "your_secret_key"  # Change this to a secure secret key
-ALGORITHM = "HS256"
+SECRET_KEY = os.getenv("JWT_ENCODE_SERCRET_KEY")  # Change this to a secure secret key
+ALGORITHM = os.getenv("JWT_ENCODE_ALGORITHM")
 ACCESS_TOKEN_EXPIRE_MINUTES = 30  # Token expiration time
 
 # Hash password
@@ -33,7 +34,6 @@ def create_access_token(user_id: str, expires_delta: timedelta = None) -> str:
     """
     Generate a JWT token with a string-based user ID (e.g., 'USER1234567').
     """
-    print("****user_id", user_id)
     user_id = user_id.get('sub')
     if not isinstance(user_id, str) or not user_id.startswith("USER"):
         raise ValueError("User ID must be a string in the format 'USER1234567'")
@@ -56,7 +56,6 @@ def get_current_user(token: str = Depends(oauth2_scheme), db: Session = Depends(
         print("Decoded Token Payload:", payload)  # Debugging
 
         user_id = payload.get("sub")  # Now expecting a string-based user_id
-        print("*****user_id", type(user_id), user_id)
 
         if not isinstance(user_id, str) or not user_id.startswith("USER"):
             raise HTTPException(status_code=401, detail="Invalid token payload (sub is not a valid user ID)")

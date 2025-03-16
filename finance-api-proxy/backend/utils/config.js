@@ -1,1 +1,1 @@
-export const BACKEND_BASE_URL = "http://backend:5000/backend";
+export const BACKEND_BASE_URL = process.env.FINANCE_BACKEND_URL_BASE;

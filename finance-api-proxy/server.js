@@ -1,7 +1,7 @@
 import express from "express";
 import cors from "cors";
 import proxyRoutes from "./backend/routes/proxyRoutes.js";
-
+import helmet from "helmet";
 const app = express();
 
 app.use(cors({
@@ -9,6 +9,7 @@ app.use(cors({
     methods: "GET,POST,PATCH,DELETE",
     credentials: true
   }));
+app.use(helmet())
 app.use(express.json()); // ✅ Ensures JSON body is parsed
 
 app.use("/proxy", proxyRoutes);

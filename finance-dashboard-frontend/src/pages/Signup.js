@@ -1,11 +1,30 @@
 import React, { useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { signupUser } from "../redux/slices/authSlice";
-import { Link, useNavigate } from "react-router-dom";
-import "../styles/css/Auth.css";
-import { GoogleLogin } from '@react-oauth/google';
+ import { useDispatch, useSelector } from "react-redux";
+ import { signupUser } from "../redux/slices/authSlice";
+ import { Link, useNavigate } from "react-router-dom";
+ import { GoogleLogin } from '@react-oauth/google';
+ import { config } from "../config";
+ import {
+  Paper,
+  Typography,
+  TextField,
+  Button,
+  Box,
+  CircularProgress,
+  Alert,
+ } from "@mui/material";
+ import { styled } from '@mui/material/styles';
 
-const Signup = () => {
+
+ const StyledPaper = styled(Paper)(({ theme }) => ({
+  padding: theme.spacing(4),
+  display: 'flex',
+  flexDirection: 'column',
+  alignItems: 'center',
+  width: '350px',
+ }));
+
+ const Signup = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { loading, error } = useSelector((state) => state.auth);
@@ -34,10 +53,9 @@ const Signup = () => {
   };
 
   const handleGoogleSuccess = async (credentialResponse) => {
-    
     const accessToken = credentialResponse.credential;
     try {
-      const response = await fetch('http://localhost:4000/proxy/auth/google/callback', {
+      const response = await fetch(`${config.API_URL}/auth/google/callback`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -62,63 +80,80 @@ const Signup = () => {
   };
 
   return (
-    <div className="auth-container">
-      <div className="auth-box">
-        <h2>Sign Up</h2>
-        {successMessage && <p className="success-message">{successMessage}</p>}
-        {error && <p className="error-message">{error.error}</p>}
+    <Box
+      sx={{
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        minHeight: '100vh',
+        bgcolor: '#f4f6f9', // Optional: Add a background color to the page
+      }}
+    >
+      <StyledPaper elevation={3}>
+        <Typography variant="h5" component="h2" gutterBottom>
+          Sign Up
+        </Typography>
+        {successMessage && <Alert severity="success">{successMessage}</Alert>}
+        {error && <Alert severity="error">{error.error}</Alert>}
 
-        <form onSubmit={handleSubmit}>
-          <div className="input-group">
-            <label>Name</label>
-            <input
-              type="text"
-              name="name"
-              placeholder="Enter your Name"
-              value={formData.name}
-              onChange={handleChange}
-              required
-            />
-          </div>
-          <div className="input-group">
-            <label>Email</label>
-            <input
-              type="email"
-              name="email"
-              placeholder="Enter your email"
-              value={formData.email}
-              onChange={handleChange}
-              required
-            />
-          </div>
-          <div className="input-group">
-            <label>Password</label>
-            <input
-              type="password"
-              name="password"
-              placeholder="Enter your password"
-              value={formData.password}
-              onChange={handleChange}
-              required
-            />
-          </div>
-          <button type="submit" className="auth-button" disabled={loading}>
-            {loading ? "Signing Up..." : "Sign Up"}
-          </button>
+        <form onSubmit={handleSubmit} style={{ width: '100%' }}>
+          <TextField
+            label="Name"
+            name="name"
+            placeholder="Enter your Name"
+            value={formData.name}
+            onChange={handleChange}
+            required
+            fullWidth
+            margin="normal"
+          />
+          <TextField
+            label="Email"
+            name="email"
+            placeholder="Enter your email"
+            value={formData.email}
+            onChange={handleChange}
+            required
+            fullWidth
+            margin="normal"
+            type="email"
+          />
+          <TextField
+            label="Password"
+            name="password"
+            placeholder="Enter your password"
+            value={formData.password}
+            onChange={handleChange}
+            required
+            fullWidth
+            margin="normal"
+            type="password"
+          />
+          <Button
+            type="submit"
+            variant="contained"
+            color="primary"
+            fullWidth
+            disabled={loading}
+            style={{ marginTop: '1rem' }}
+          >
+            {loading ? <CircularProgress size={24} /> : "Sign Up"}
+          </Button>
         </form>
-        <div style={{marginTop: "10px"}}>
+        <Box mt={2}>
           <GoogleLogin
             onSuccess={handleGoogleSuccess}
             onError={handleGoogleFailure}
           />
-        </div>
-
-        <p>
+        </Box>
+        <Typography variant="body2" style={{ marginTop: '1rem' }}>
           Already have an account?{" "}
-          <Link to="/login" className="auth-link">Login here</Link>
-        </p>
-      </div>
-    </div>
+          <Link to="/login" style={{ textDecoration: 'none', color: '#1976d2' }}>
+            Login here
+          </Link>
+        </Typography>
+      </StyledPaper>
+    </Box>
   );
 };
 
