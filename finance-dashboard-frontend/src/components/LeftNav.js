@@ -3,7 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { logout } from "../redux/slices/authSlice"; // Import logout action
 import { FiMenu, FiX, FiEdit, FiLogOut } from "react-icons/fi";
-import { MdDashboard, MdAttachMoney, MdAccountBalance } from "react-icons/md";
+import { MdDashboard, MdAttachMoney, MdAccountBalance, MdAccountCircle } from "react-icons/md";
 import "../styles/css/LeftNav.css";
 
 const LeftNav = () => {
@@ -33,17 +33,15 @@ const LeftNav = () => {
               alt="User Avatar"
               className="user-avatar"
             />
-            <div className="user-details">
-              <span className="user-name">John Doe</span>
-              <Link to="/profile" >
-                <FiEdit className="edit-icon" />
-              </Link>
-            </div>
           </div>
         )}
       </div>
 
       <nav className="nav-links">
+        <Link to="/profile" className="nav-item">
+          <MdAccountCircle className="nav-icon" />
+          {!isCollapsed && <span>Profile</span>}
+        </Link>
         <Link to="/dashboard" className="nav-item">
           <MdDashboard className="nav-icon" />
           {!isCollapsed && <span>Dashboard</span>}
